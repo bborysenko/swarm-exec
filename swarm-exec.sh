@@ -45,6 +45,7 @@ function swarm_exec() {
 
   docker service create \
     ${SWARMEXEC_NAME} \
+    ${SWARMEXEC_ENV} \
     --detach=true \
     --restart-condition none \
     --stop-grace-period 0s \
@@ -123,6 +124,10 @@ while [[ $# -gt 0 ]]; do
       ;;
     --entrypoint)
       SWARMEXEC_ENTRYPOINT="$2"
+      shift 2
+      ;;
+    --env)
+      SWARMEXEC_ENV="$SWARMEXEC_ENV --env $2"
       shift 2
       ;;
     --)
