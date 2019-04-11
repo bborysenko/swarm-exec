@@ -23,14 +23,14 @@ USAGE
 function cleanup() {
   rc=$?
 
-  echo "> Cleaning up ..." 1>&2
-
   if [[ -n ${log_pid} ]]; then
     (kill $log_pid && wait $log_pid) >/dev/null 2>&1
+  else
+    # to catch output for really short lived task that take less then second
+    docker service logs ${SWARMEXEC_NAME#* } --raw
   fi
-  docker service ps ${SWARMEXEC_NAME#* }
+  echo "> Cleaning up ..." 1>&2
   docker service rm ${SWARMEXEC_NAME#* } >/dev/null 2>&1
-
   exit $rc
 }
 
